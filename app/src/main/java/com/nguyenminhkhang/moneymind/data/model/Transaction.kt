@@ -1,6 +1,5 @@
 package com.nguyenminhkhang.moneymind.data.model
 
-import android.view.SurfaceControl
 import java.util.UUID
 
 

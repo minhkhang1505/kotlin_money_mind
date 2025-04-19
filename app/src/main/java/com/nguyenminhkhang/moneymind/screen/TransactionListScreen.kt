@@ -35,6 +35,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.nguyenminhkhang.moneymind.components.MyBottomAppBar
 import com.nguyenminhkhang.moneymind.components.MyTopAppBar
+import com.nguyenminhkhang.moneymind.data.model.Transaction
 import com.nguyenminhkhang.moneymind.viewmodel.TransactionViewModel
 
 data class Task(
@@ -49,16 +50,16 @@ data class Task(
 fun TaskListScreen(
     dateList: List<String> = listOf("14 Mon", "15 Tue", "16 Wed", "17 Thu"),
     selectedDate: String = "14 Mon",
-    tasks: List<Task>,
-    navController: NavController
+    navController: NavController,
+    transactionViewModel: TransactionViewModel
 ) {
     Scaffold (
         topBar = { MyTopAppBar(showBackButton = false, title = "Today", onBackButtonClick = {}) },
         bottomBar = { MyBottomAppBar(navController) }
     ) {
-        val transactionViewModel: TransactionViewModel = viewModel()
         Log.d("mk040515", transactionViewModel.transactions.toString())
         val scrollState = rememberScrollState()
+        val transactions = transactionViewModel.transactions
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -98,8 +99,8 @@ fun TaskListScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                     modifier = Modifier.fillMaxHeight()
                 ) {
-                    items(tasks) { task ->
-                        TaskItem(task)
+                    items(transactions) { transaction ->
+                        TaskItem(transaction)
                     }
                 }
             }
@@ -108,41 +109,27 @@ fun TaskListScreen(
 }
 
 @Composable
-fun TaskItem(task: Task) {
+fun TaskItem(transaction: Transaction) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
-            .background(if (task.isDone) Color(0xFFEDEDED) else Color.White)
+//            .background(if (task.isDone) Color(0xFFEDEDED) else Color.White)
             .padding(16.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = task.time,
+                text = transaction.time,
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
                 modifier = Modifier.width(80.dp)
             )
             Column {
-                Text(task.title, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                task.description?.let {
+                Text(transaction.title, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                transaction.category?.let {
                     Text(text = it, fontSize = 14.sp, color = Color.Gray)
                 }
             }
         }
     }
 }
-
-
-//@Preview(showBackground = true)
-//@Composable
-//fun PreviewTaskListScreen() {
-//    val dummyTasks = listOf(
-//        Task(1, "6:00 - 7:30", "Fitness", "Exercise and gym"),
-//        Task(2, "7:30 - 8:00", "Check Emails and sms", "Review and respond to emails and SMS"),
-//        Task(3, "8:00 - 10:00", "Work on Projects", "Focus on the tasks related to Project"),
-//        Task(4, "10:00 - 11:00", "Attend Meeting", "Team meeting with client ABC"),
-//        Task(5, "11:00 - 13:00", "Work of XYZ", "Change theme and ideas in XYZ")
-//    )
-//    TaskListScreen(tasks = dummyTasks, onAddNewClick = {}, navController = NavController)
-//}

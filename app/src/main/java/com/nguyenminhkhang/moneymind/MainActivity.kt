@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -15,6 +16,7 @@ import com.nguyenminhkhang.moneymind.screen.CurrencyConverterScreen
 import com.nguyenminhkhang.moneymind.screen.Task
 import com.nguyenminhkhang.moneymind.screen.TaskListScreen
 import com.nguyenminhkhang.moneymind.ui.theme.MoneyMindTheme
+import com.nguyenminhkhang.moneymind.viewmodel.TransactionViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,14 +43,17 @@ fun MyApp (navController: NavHostController) {
         Task(7, "10:00 - 11:00", "Attend Meeting", "Team meeting with client ABC"),
         Task(8, "11:00 - 13:00", "Work of XYZ", "Change theme and ideas in XYZ"),
     )
+
+    val transactionViewModel : TransactionViewModel = viewModel()
+
     NavHost(navController = navController, startDestination = "task_list_screen") {
 
         composable(route = Screen.TaskListScreen.route) {
-            TaskListScreen( tasks = dummyTasks, navController = navController )
+            TaskListScreen(navController = navController, transactionViewModel = transactionViewModel )
         }
 
         composable(route = Screen.AddTransactionScreen.route) {
-            AddTransactionScreen(navController = navController)
+            AddTransactionScreen(navController = navController, transactionViewModel = transactionViewModel)
         }
 
         composable(route = Screen.CurrencyConverterScreen.route) {
