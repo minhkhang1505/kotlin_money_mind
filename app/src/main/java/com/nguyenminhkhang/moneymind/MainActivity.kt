@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.internal.composableLambda
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -13,9 +14,11 @@ import androidx.navigation.compose.rememberNavController
 import com.nguyenminhkhang.moneymind.screen.AccountScreen
 import com.nguyenminhkhang.moneymind.screen.AddTransactionScreen
 import com.nguyenminhkhang.moneymind.screen.CurrencyConverterScreen
+import com.nguyenminhkhang.moneymind.screen.DashboardScreen
 import com.nguyenminhkhang.moneymind.screen.Task
 import com.nguyenminhkhang.moneymind.screen.TaskListScreen
 import com.nguyenminhkhang.moneymind.ui.theme.MoneyMindTheme
+import com.nguyenminhkhang.moneymind.viewmodel.DashboardViewModel
 import com.nguyenminhkhang.moneymind.viewmodel.TransactionViewModel
 
 class MainActivity : ComponentActivity() {
@@ -45,8 +48,9 @@ fun MyApp (navController: NavHostController) {
     )
 
     val transactionViewModel : TransactionViewModel = viewModel()
+    val dashboardViewModel : DashboardViewModel = viewModel()
 
-    NavHost(navController = navController, startDestination = "task_list_screen") {
+    NavHost(navController = navController, startDestination = "dashboard_screen") {
 
         composable(route = Screen.TaskListScreen.route) {
             TaskListScreen(navController = navController, transactionViewModel = transactionViewModel )
@@ -62,6 +66,10 @@ fun MyApp (navController: NavHostController) {
 
         composable(route = Screen.AccountScreen.route) {
             AccountScreen(navController = navController)
+        }
+
+        composable(route = Screen.DashboardScreen.route) {
+            DashboardScreen(navController = navController, dashboardViewModel = dashboardViewModel)
         }
     }
 }

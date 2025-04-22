@@ -11,7 +11,6 @@ data class TransactionCategory(
 var defaultCategories = listOf(
     TransactionCategory(type = "income", name = "Salary"),
     TransactionCategory(type = "income", name = "Award"),
-    TransactionCategory(type = "income", name = "Other"),
     TransactionCategory(type = "expense", name = "Eat and drink"),
     TransactionCategory(type = "expense", name = "Entertainment"),
     TransactionCategory(type = "expense", name = "Shopping"),

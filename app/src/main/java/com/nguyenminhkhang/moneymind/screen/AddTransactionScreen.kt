@@ -58,9 +58,7 @@ fun AddTransactionScreen(
     navController: NavController,
     transactionViewModel: TransactionViewModel,
 ) {
-    val shortcuts = listOf(
-       "Them", "Trà sữa", "Cơm trưa", "Bún bò", "Di chuyển", "Ăn sáng", "Ăn trưa", "Ăn tối"
-    )
+    val shortcuts = transactionViewModel.transactionShortcut
     val scrollState = rememberScrollState()
     var dateOfTransaction by remember { mutableStateOf<Long?>(null) }
     var timeOfTransaction by remember { mutableStateOf("") }
@@ -121,12 +119,15 @@ fun AddTransactionScreen(
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                items(shortcuts) { label ->
+                items(shortcuts) { shortcut ->
                     AssistChip(
                         onClick = {
-
+                            title = shortcut.title
+                            amountInput = shortcut.amount.toString()
+                            selectedCategory = shortcut.category
+                            note = shortcut.description.toString()
                         },
-                        label = { Text(label) },
+                        label = { Text(shortcut.title) },
                         leadingIcon = {
                             Icon(imageVector = Icons.Default.Add, contentDescription = null)
                         },
@@ -138,7 +139,8 @@ fun AddTransactionScreen(
                 label = { Text("Title") },
                 value = title,
                 onValueChange = {title = it},
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp)
             )
             OutlinedTextField(
                 label = { Text("Amount") },
@@ -148,7 +150,8 @@ fun AddTransactionScreen(
                     amountInput = it
                     amount = it.toDoubleOrNull() ?: 0.0
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp)
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -178,6 +181,7 @@ fun AddTransactionScreen(
                     .onGloballyPositioned { coordinates ->
                         mTextFieldSize = coordinates.size
                     },
+                shape = RoundedCornerShape(12.dp),
                 trailingIcon = {
                     Icon(
                         imageVector = Icons.Default.KeyboardArrowDown,
@@ -211,6 +215,7 @@ fun AddTransactionScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(120.dp),
+                shape = RoundedCornerShape(12.dp),
                 singleLine = false,
                 maxLines = 5
             )

@@ -28,13 +28,13 @@ fun MyBottomAppBar(navController: NavController) {
                 horizontalArrangement = Arrangement.SpaceEvenly, // Cách đều các nút
                 verticalAlignment = Alignment.CenterVertically
             ){
-                IconButton(onClick = { navController.navigate(Screen.TaskListScreen.route) }) {
+                IconButton(onClick = { navController.navigate(Screen.DashboardScreen.route) }) {
                     Icon(
                         painter = painterResource(id = R.drawable.baseline_home_24),
                         contentDescription = "Main screen"
                     )
                 }
-                IconButton(onClick = { /* do something */ }) {
+                IconButton(onClick = { navController.navigate(Screen.TaskListScreen.route) }) {
                     Icon(
                         painter = painterResource(id = R.drawable.baseline_call_to_action_24),
                         contentDescription = "Wallet",
