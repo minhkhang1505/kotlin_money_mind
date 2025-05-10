@@ -1,6 +1,5 @@
 package com.nguyenminhkhang.moneymind.screen
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -43,22 +42,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.nguyenminhkhang.moneymind.R
 import com.nguyenminhkhang.moneymind.components.MyBottomAppBar
 import com.nguyenminhkhang.moneymind.components.MyTopAppBar
+import com.nguyenminhkhang.moneymind.data.local.model.ConverterHistory
 import com.nguyenminhkhang.moneymind.viewmodel.CurrencyViewModel
 
-data class ConverterHistory(
-    val unit: String,
-    val valueToConvert: String,
-    val unitIsConverted: String,
-    val valueAfterConverted: String
-)
-
 @Composable
-fun CurrencyConverterScreen(navController: NavController) {
+fun CurrencyConverterScreen(navController: NavController,
+currencyViewModel: CurrencyViewModel) {
     Scaffold (
         topBar = {
             MyTopAppBar(title = "Currency Converter", showBackButton = false, onBackButtonClick = {})
@@ -66,20 +59,18 @@ fun CurrencyConverterScreen(navController: NavController) {
         bottomBar = { MyBottomAppBar(navController) }
     ) {
 
-        val viewModel : CurrencyViewModel = viewModel()
-
-        val monetaryUnitList = viewModel.currencies
+        val monetaryUnitList = currencyViewModel.currencies
         var isExpanded by remember { mutableStateOf(false) }
         var isExpandedToConvert by remember { mutableStateOf(false) }
         var selectedOption by remember { mutableStateOf("USD") }
         var selectedOptionToConvert by remember { mutableStateOf("VND") }
-        var converterHistoryList = viewModel.converterHistoryList
+        var converterHistoryList = currencyViewModel.converterHistoryList
 
         LaunchedEffect(selectedOption) {
-            viewModel.fetchRates("4e27574ac7250ddfc1527a65", selectedOption)
+            currencyViewModel.fetchRates("4e27574ac7250ddfc1527a65", selectedOption)
         }
 
-        val rate = viewModel.rates[selectedOptionToConvert] ?: 0.0
+        val rate = currencyViewModel.rates[selectedOptionToConvert] ?: 0.0
         var inputValue by remember { mutableStateOf("") }
         var result by remember { mutableStateOf("") }
         Column (
@@ -194,7 +185,7 @@ fun CurrencyConverterScreen(navController: NavController) {
                 onClick = {
                     val value = inputValue.toDoubleOrNull() ?: 0.0
                     result = (value * rate).toString()
-                    viewModel.addConverterHistory(ConverterHistory(unit = selectedOption, valueToConvert = inputValue, unitIsConverted = selectedOptionToConvert, valueAfterConverted = result))
+                    currencyViewModel.addConverterHistory(ConverterHistory(unit = selectedOption, valueToConvert = inputValue, unitIsConverted = selectedOptionToConvert, valueAfterConverted = result))
                 },
                 modifier = Modifier.padding(8.dp).fillMaxWidth()
             ) {

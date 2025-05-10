@@ -6,17 +6,25 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nguyenminhkhang.moneymind.data.local.model.ConverterHistory
 import com.nguyenminhkhang.moneymind.data.model.RetrofitInstance
-import com.nguyenminhkhang.moneymind.screen.ConverterHistory
+import com.nguyenminhkhang.moneymind.data.repository.ConverterHistoryRepository
 import kotlinx.coroutines.launch
 
-class CurrencyViewModel: ViewModel() {
+class CurrencyViewModel(private val converterHistoryRepository: ConverterHistoryRepository): ViewModel() {
     var rates by mutableStateOf<Map<String, Double>>(emptyMap())
     var currencies by mutableStateOf<List<String>>(emptyList())
-
     var isLoading by mutableStateOf(false)
 
     var converterHistoryList by mutableStateOf<List<ConverterHistory>>(emptyList())
+
+    init {
+        viewModelScope.launch {
+            converterHistoryRepository.getAllConverterHistories().collect {
+                converterHistoryList = it
+            }
+        }
+    }
 
     fun fetchRates(apiKey: String, base: String) {
         viewModelScope.launch {
@@ -39,8 +47,8 @@ class CurrencyViewModel: ViewModel() {
     }
 
     fun addConverterHistory(converterHistory: ConverterHistory) {
-        converterHistoryList = converterHistoryList.toMutableList().apply {
-            add(converterHistory)
+        viewModelScope.launch {
+            converterHistoryRepository.insertConverterHistory(converterHistory)
         }
     }
 }

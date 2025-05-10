@@ -1,8 +1,7 @@
 package com.nguyenminhkhang.moneymind.data.repository
 
-import com.nguyenminhkhang.moneymind.data.local.Transaction
+import com.nguyenminhkhang.moneymind.data.local.model.Transaction
 import com.nguyenminhkhang.moneymind.data.local.dao.TransactionDAO
-import kotlinx.coroutines.flow.Flow
 
 class TransactionRepository(private val transactionDao: TransactionDAO) {
     fun getAllTransactions() = transactionDao.getAllTransactions()

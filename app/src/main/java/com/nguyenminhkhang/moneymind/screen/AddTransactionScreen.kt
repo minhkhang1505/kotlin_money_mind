@@ -51,7 +51,7 @@ import com.nguyenminhkhang.moneymind.components.DatePickerFieldToModal
 import com.nguyenminhkhang.moneymind.components.MyBottomAppBar
 import com.nguyenminhkhang.moneymind.components.MyTopAppBar
 import com.nguyenminhkhang.moneymind.components.TimePickerSample
-import com.nguyenminhkhang.moneymind.data.local.Transaction
+import com.nguyenminhkhang.moneymind.data.local.model.Transaction
 import com.nguyenminhkhang.moneymind.viewmodel.TransactionViewModel
 
 @OptIn(UnstableApi::class)

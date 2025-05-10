@@ -4,11 +4,15 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.nguyenminhkhang.moneymind.data.local.dao.ConverterHistoryDAO
+import com.nguyenminhkhang.moneymind.data.local.model.ConverterHistory
 import com.nguyenminhkhang.moneymind.data.local.dao.TransactionDAO
+import com.nguyenminhkhang.moneymind.data.local.model.Transaction
 
-@Database (entities = [Transaction::class], version = 1)
+@Database (entities = [Transaction::class, ConverterHistory::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun transactionDao(): TransactionDAO
+    abstract fun converterhistoryDao(): ConverterHistoryDAO
 
     companion object {
         @Volatile

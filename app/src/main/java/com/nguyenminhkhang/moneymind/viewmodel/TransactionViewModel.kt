@@ -1,14 +1,11 @@
 package com.nguyenminhkhang.moneymind.viewmodel
 
-import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nguyenminhkhang.moneymind.data.local.AppDatabase
-import com.nguyenminhkhang.moneymind.data.local.Transaction
-import com.nguyenminhkhang.moneymind.data.local.dao.TransactionDAO
+import com.nguyenminhkhang.moneymind.data.local.model.Transaction
 import com.nguyenminhkhang.moneymind.data.model.TransactionCategory
 import com.nguyenminhkhang.moneymind.data.model.defaultCategories
 import com.nguyenminhkhang.moneymind.data.repository.TransactionRepository

@@ -49,7 +49,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.nguyenminhkhang.moneymind.components.MyBottomAppBar
 import com.nguyenminhkhang.moneymind.components.MyTopAppBar
-import com.nguyenminhkhang.moneymind.data.local.Transaction
+import com.nguyenminhkhang.moneymind.data.local.model.Transaction
 import com.nguyenminhkhang.moneymind.viewmodel.TransactionViewModel
 import kotlinx.coroutines.launch
 

@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.internal.composableLambda
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -13,7 +12,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.nguyenminhkhang.moneymind.data.local.AppDatabase
+import com.nguyenminhkhang.moneymind.data.local.CurrencyViewModelFactory
 import com.nguyenminhkhang.moneymind.data.local.TransactionViewModelFactory
+import com.nguyenminhkhang.moneymind.data.repository.ConverterHistoryRepository
 import com.nguyenminhkhang.moneymind.data.repository.TransactionRepository
 import com.nguyenminhkhang.moneymind.screen.AccountScreen
 import com.nguyenminhkhang.moneymind.screen.AddTransactionScreen
@@ -22,6 +23,7 @@ import com.nguyenminhkhang.moneymind.screen.DashboardScreen
 import com.nguyenminhkhang.moneymind.screen.Task
 import com.nguyenminhkhang.moneymind.screen.TaskListScreen
 import com.nguyenminhkhang.moneymind.ui.theme.MoneyMindTheme
+import com.nguyenminhkhang.moneymind.viewmodel.CurrencyViewModel
 import com.nguyenminhkhang.moneymind.viewmodel.DashboardViewModel
 import com.nguyenminhkhang.moneymind.viewmodel.TransactionViewModel
 
@@ -50,11 +52,20 @@ fun MyApp (navController: NavHostController) {
         Task(7, "10:00 - 11:00", "Attend Meeting", "Team meeting with client ABC"),
         Task(8, "11:00 - 13:00", "Work of XYZ", "Change theme and ideas in XYZ"),
     )
+
     val context = LocalContext.current
     val database = AppDatabase.getDatabase(context)
+
+    //Transactions
     val repository = TransactionRepository(database.transactionDao())
     val transactionViewModelFactory = TransactionViewModelFactory(repository)
     val transactionViewModel: TransactionViewModel = viewModel(factory = transactionViewModelFactory)
+
+    //Cerrency Converter
+    val converterRepository = ConverterHistoryRepository(database.converterhistoryDao())
+    val converterViewModelFactory = CurrencyViewModelFactory(converterRepository)
+    val currencyViewModel: CurrencyViewModel = viewModel(factory = converterViewModelFactory)
+
     val dashboardViewModel : DashboardViewModel = viewModel()
 
     NavHost(navController = navController, startDestination = "dashboard_screen") {
@@ -68,7 +79,7 @@ fun MyApp (navController: NavHostController) {
         }
 
         composable(route = Screen.CurrencyConverterScreen.route) {
-            CurrencyConverterScreen(navController = navController)
+            CurrencyConverterScreen(navController = navController, currencyViewModel = currencyViewModel)
         }
 
         composable(route = Screen.AccountScreen.route) {
