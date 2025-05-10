@@ -1,5 +1,6 @@
 package com.nguyenminhkhang.moneymind.screen
 
+import android.widget.Space
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.nguyenminhkhang.moneymind.components.CustomPieChart
+import com.nguyenminhkhang.moneymind.components.MonthlyLineChart
 import com.nguyenminhkhang.moneymind.components.MyBottomAppBar
 import com.nguyenminhkhang.moneymind.components.MyTopAppBar
 import com.nguyenminhkhang.moneymind.components.WeeklyBarChart
@@ -161,6 +163,21 @@ fun DashboardScreen (navController: NavHostController, dashboardViewModel: Dashb
 
             ) {
                 CustomPieChart(data = weeklyTransaction, labels = listOf("Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy", "Chủ Nhật"))
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Box(
+                modifier = Modifier.padding(8.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(MaterialTheme.colorScheme.surfaceContainer)
+                    .fillMaxWidth()
+            ) {
+                val income = listOf(1200f, 1500f, 1000f, 1300f, 1600f, 1400f, 1100f, 1700f, 1550f, 1200f, 1350f, 1450f)
+                val expense = listOf(800f, 900f, 950f, 1000f, 1100f, 1050f, 980f, 1150f, 1080f, 970f, 1000f, 1020f)
+
+                MonthlyLineChart(income, expense)
+
             }
         }
     }

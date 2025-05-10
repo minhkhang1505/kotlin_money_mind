@@ -6,11 +6,15 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.internal.composableLambda
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.nguyenminhkhang.moneymind.data.local.AppDatabase
+import com.nguyenminhkhang.moneymind.data.local.TransactionViewModelFactory
+import com.nguyenminhkhang.moneymind.data.repository.TransactionRepository
 import com.nguyenminhkhang.moneymind.screen.AccountScreen
 import com.nguyenminhkhang.moneymind.screen.AddTransactionScreen
 import com.nguyenminhkhang.moneymind.screen.CurrencyConverterScreen
@@ -46,8 +50,11 @@ fun MyApp (navController: NavHostController) {
         Task(7, "10:00 - 11:00", "Attend Meeting", "Team meeting with client ABC"),
         Task(8, "11:00 - 13:00", "Work of XYZ", "Change theme and ideas in XYZ"),
     )
-
-    val transactionViewModel : TransactionViewModel = viewModel()
+    val context = LocalContext.current
+    val database = AppDatabase.getDatabase(context)
+    val repository = TransactionRepository(database.transactionDao())
+    val transactionViewModelFactory = TransactionViewModelFactory(repository)
+    val transactionViewModel: TransactionViewModel = viewModel(factory = transactionViewModelFactory)
     val dashboardViewModel : DashboardViewModel = viewModel()
 
     NavHost(navController = navController, startDestination = "dashboard_screen") {

@@ -1,6 +1,6 @@
 package com.nguyenminhkhang.moneymind.screen
 
-import android.util.Log
+import androidx.annotation.OptIn
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -43,16 +43,18 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.media3.common.util.Log
+import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavController
 import com.nguyenminhkhang.moneymind.components.AlertDialogExample
 import com.nguyenminhkhang.moneymind.components.DatePickerFieldToModal
 import com.nguyenminhkhang.moneymind.components.MyBottomAppBar
 import com.nguyenminhkhang.moneymind.components.MyTopAppBar
 import com.nguyenminhkhang.moneymind.components.TimePickerSample
-import com.nguyenminhkhang.moneymind.data.model.Transaction
+import com.nguyenminhkhang.moneymind.data.local.Transaction
 import com.nguyenminhkhang.moneymind.viewmodel.TransactionViewModel
 
+@OptIn(UnstableApi::class)
 @Composable
 fun AddTransactionScreen(
     navController: NavController,
@@ -223,7 +225,8 @@ fun AddTransactionScreen(
             ElevatedButton(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
-                    val newTransaction = Transaction.create(
+                    Log.d("mkhang123", "da  den day")
+                    val newTransaction = Transaction(
                         title = title,
                         date = dateOfTransaction,
                         time = timeOfTransaction,
@@ -231,6 +234,7 @@ fun AddTransactionScreen(
                         category = selectedCategory,
                         description = note
                     )
+                    Log.d("mkhang123", newTransaction.toString())
                     transactionViewModel.addTransaction(newTransaction)
                     showNoticeSaved = true
                 },

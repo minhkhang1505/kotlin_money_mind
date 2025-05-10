@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    kotlin("kapt")
 }
 
 android {
@@ -40,6 +41,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.media3.common.ktx)
+    val room_version = "2.7.1"
     implementation("androidx.navigation:navigation-compose:2.8.9")
     implementation("androidx.compose.ui:ui-text-google-fonts:1.7.8")
     implementation("androidx.compose.ui:ui-tooling-preview:1.7.8")
@@ -50,6 +53,10 @@ dependencies {
     //dependency for chart
     implementation("com.patrykandpatrick.vico:compose-m3:1.16.0") // Replace with latest version
     implementation("com.patrykandpatrick.vico:core:1.16.0")   // Replace with latest version
+
+    implementation("androidx.room:room-runtime:$room_version")
+    kapt ("androidx.room:room-compiler:$room_version")
+    implementation ("androidx.room:room-ktx:$room_version")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -62,6 +69,7 @@ dependencies {
     implementation(libs.androidx.navigation.runtime.android)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.runtime)
+    implementation(libs.androidx.foundation.layout.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
