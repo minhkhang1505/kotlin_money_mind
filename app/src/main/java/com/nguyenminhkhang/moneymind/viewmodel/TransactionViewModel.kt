@@ -6,8 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nguyenminhkhang.moneymind.data.local.model.Transaction
-import com.nguyenminhkhang.moneymind.data.model.TransactionCategory
-import com.nguyenminhkhang.moneymind.data.model.defaultCategories
+import com.nguyenminhkhang.moneymind.data.local.model.TransactionCategory
+import com.nguyenminhkhang.moneymind.data.repository.TransactionCategoryRepository
 import com.nguyenminhkhang.moneymind.data.repository.TransactionRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,12 +15,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class TransactionViewModel(private val repository: TransactionRepository) : ViewModel() {
+class TransactionViewModel(private val repository: TransactionRepository, private val categoryRepository: TransactionCategoryRepository) : ViewModel() {
 
     private val _transactions = MutableStateFlow<List<Transaction>>(emptyList())
     val transactions: StateFlow<List<Transaction>> = _transactions.asStateFlow()
 
-    private var categories by mutableStateOf(defaultCategories)
+    private val _categories = MutableStateFlow<List<TransactionCategory>>(emptyList())
+    val categories: StateFlow<List<TransactionCategory>> = _categories.asStateFlow()
+
 
     var transactionShortcut by mutableStateOf(listOf<Transaction>())
 
@@ -32,6 +34,13 @@ class TransactionViewModel(private val repository: TransactionRepository) : View
         }
     }
 
+    init {
+        viewModelScope.launch {
+            categoryRepository.getAllCategories().collectLatest { categories ->
+                _categories.value = categories
+            }
+        }
+    }
 
     fun addTransaction(transaction: Transaction) {
         viewModelScope.launch {
@@ -40,10 +49,10 @@ class TransactionViewModel(private val repository: TransactionRepository) : View
         }   }
 
     fun addCategory(category: TransactionCategory) {
-        categories = categories.toMutableList().apply { add(category) }
+        viewModelScope.launch {
+            categoryRepository.insertCategory(category)
+        }
     }
-
-    fun getCategoryList(): List<TransactionCategory> = categories
 
     fun deleteTransaction(transaction: Transaction) {
         viewModelScope.launch {

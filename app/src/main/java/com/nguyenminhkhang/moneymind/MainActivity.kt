@@ -15,6 +15,7 @@ import com.nguyenminhkhang.moneymind.data.local.AppDatabase
 import com.nguyenminhkhang.moneymind.data.local.CurrencyViewModelFactory
 import com.nguyenminhkhang.moneymind.data.local.TransactionViewModelFactory
 import com.nguyenminhkhang.moneymind.data.repository.ConverterHistoryRepository
+import com.nguyenminhkhang.moneymind.data.repository.TransactionCategoryRepository
 import com.nguyenminhkhang.moneymind.data.repository.TransactionRepository
 import com.nguyenminhkhang.moneymind.screen.AccountScreen
 import com.nguyenminhkhang.moneymind.screen.AddTransactionScreen
@@ -58,7 +59,8 @@ fun MyApp (navController: NavHostController) {
 
     //Transactions
     val repository = TransactionRepository(database.transactionDao())
-    val transactionViewModelFactory = TransactionViewModelFactory(repository)
+    val transactionCategoryRepository= TransactionCategoryRepository(database.transactionCategoryDao())
+    val transactionViewModelFactory = TransactionViewModelFactory(repository, transactionCategoryRepository)
     val transactionViewModel: TransactionViewModel = viewModel(factory = transactionViewModelFactory)
 
     //Cerrency Converter
